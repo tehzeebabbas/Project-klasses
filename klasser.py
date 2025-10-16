@@ -1,3 +1,5 @@
-print("Hello World!")
-print("Hej!")
-print("Hello!")
+class karaktär:
+    def __inti__(self, namn, hälsa, attackkraft):
+        self.namn = namn
+        self.hälsa = hälsa
+        self.attackkraft = attackkraft
