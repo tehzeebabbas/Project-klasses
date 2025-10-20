@@ -5,6 +5,6 @@ class karaktär:
         self.attackkraft = attackkraft
 
 class Mage(karaktär):
-    def __init__(self, namn, hälsa, attackkraft, magi):
-        super().__init__(self, namn, hälsa, attackkraft, magi)
-        self.magi = magi
+    def __init__(self, namn, hälsa, attackkraft, mana):
+        super().__init__(self, namn, hälsa, attackkraft, mana)
+        self.mana = mana
