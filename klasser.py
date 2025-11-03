@@ -91,7 +91,7 @@ class Arena:
             print(f"\nRunda {runda}")
 
 mage = Mage("Merlin", 20, 3, mana = 10)
-ranger = Ranger("Robin", 181, 4, energy = 8)
+ranger = Ranger("Robin", 18, 4, energy = 8)
 warrior = Warrior("Thor", 22, 2, stamina = 12)
 
 mage.attack(ranger)
