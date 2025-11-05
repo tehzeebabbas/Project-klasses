@@ -1,8 +1,8 @@
 class karaktär:
-    def __init__(self, namn, hälsa, attackkraft):
+    def __init__(self, namn, hälsa, attack_kraft):
         self.namn = namn
         self._hälsa = hälsa
-        self.attackkraft = attackkraft
+        self.attack_kraft = attack_kraft
      
     def is_alive(self):
         return self._hälsa > 0
@@ -15,88 +15,152 @@ class karaktär:
         print(f"{self.namn} tar {amount} skada. Hälsa kvar: {self._hälsa}")
 
     def attack(self, other):
-        print(f"{self.namn} attackerar {other.namn} för {self.attackkraft} skada")
-        other.take_damage(self.attackkraft)
-
-class Mage(karaktär):
-    def __init__(self, namn, hälsa, attackkraft, mana):
-        super().__init__(namn, hälsa, attackkraft)
-        self.mana = mana
-
-    def attack(self, other):
-        damage = self.attackkraft + 2
-        print(f"{self.namn} använder magiskt attack mot {other.namn}  för {damage} skada")
-        other.take_damage(damage)
-
-    def special(self, other):
-        if self.mana >= 3:
-            self.mana -= 3
-            skada = self.attackkraft + 6
-            print(f"{self.namn} använder special (mana kvar {self.mana}) för {skada} skada.")
-            other.take_damage(skada)
-        else:
-            print(f"{self.namn} har inte tillräckligt med mana. Utför vanlig attack istället.")
-            self.attack(other)
-
-class Ranger(karaktär):
-    def __init__(self, namn, hälsa, attackkraft, energy):
-        super().__init__(namn, hälsa, attackkraft)
-        self.energy = energy
-
-    def attack(self, other):
-        damage = self.attackkraft + 1
-        print(f"{self.namn} skjuter pil mot {other.namn} för {damage} skada")
-        other.take_damage(damage)
+        print(f"{self.namn} gör vanlig attack mot {other.namn} och gör {self.attack_kraft} skada.")
+        other.take_damage(self.attack_kraft)
     
     def special(self, other):
-        if self.energy >= 2:
-            self.energy -= 2
-            skada = self.attackkraft + 4
-            print(f"{self.namn} använder special (energy kvar {self.energy}) för {skada} skada.")
-            other.take_damage(skada)
-        else:
-            print(f"{self.namn} har inte tillräckligt med energy. Utför vanlig attack istället.")
-            self.attack(other)
+        self.attack(other)
 
-class Warrior(karaktär):
-    def __init__(self, namn, hälsa, attackkraft, stamina):
-        super().__init__(namn, hälsa, attackkraft)
-        self.stamina = stamina
-   
+    def resurs_text(self):
+        return ""
+
+class Mage(karaktär):
+    def __init__(self, namn, hälsa, attack_kraft, mana):
+        super().__init__(namn, hälsa, attack_kraft)
+        self.mana = mana
+        self.special_namn = "Eldkot"
+
     def attack(self, other):
-        damage = self.attackkraft + 3
-        print(f"{self.namn} svingar svärd mot {other.namn} för {damage} skada")
-        other.take_damage(damage)
+        skada = self.attack_kraft + 2
+        print(f"{self.namn} använder magiskt attack mot {other.namn}  för {skada} skada")
+        other.take_damage(skada)
 
     def special(self, other):
-        if self.stamina >= 2:
-            self.stamina -= 2
-            skada = self.attack_power + 5
-            print(f"{self.namn} använder special (stamina kvar {self.stamina}) för {skada} skada.")
+        kostnad = 3
+        if self.mana >= kostnad:
+            self.mana -= kostnad
+            skada = self.attack_kraft + 10
+            print(f"{self.namn} använder specialattack {self.special_namn} ({kostnad} mana) och gör {skada} skada!")
             other.take_damage(skada)
         else:
-            print(f"{self.namn} har inte tillräckligt med stamina. Utför vanlig attack istället.")
+            print(f"{self.namn} har inte tillräckligt med mana för {self.special_namn}. Utför vanlig attack istället.")
             self.attack(other)
 
+    def resurs_text(self):
+        return f"Mana: {self.mana}"
+    
+class Ranger(karaktär):
+    def __init__(self, namn, hälsa, attack_kraft, energy):
+        super().__init__(namn, hälsa, attack_kraft)
+        self.energy = energy
+        self.special_namn = "Snabbskott"
+
+    def attack(self, other):
+        skada = self.attack_kraft + 1
+        print(f"{self.namn} skjuter pil mot {other.namn} för {skada} skada")
+        other.take_damage(skada)
+    
+    def special(self, other):
+        kostnad = 2
+        if self.energy >= kostnad:
+            self.energy -= kostnad
+            skada = self.attack_kraft + 6
+            print(f"{self.namn} använder specialattack {self.special_namn} ({kostnad} energy) och gör {skada} skada!")
+            other.take_damage(skada)
+        else:
+            print(f"{self.namn} har inte tillräckligt med energy för {self.special_namn}. Utför vanlig attack istället.")
+            self.attack(other)
+
+    def resurs_text(self):
+        return f"Energy: {self.energy}"
+
+class Warrior(karaktär):
+    def __init__(self, namn, hälsa, attack_kraft, stamina):
+        super().__init__(namn, hälsa, attack_kraft)
+        self.stamina = stamina
+        self.special_namn = "Berserkerslag"
+   
+    def attack(self, other):
+        skada = self.attack_kraft + 3
+        print(f"{self.namn} slår hårt och gör {skada} skada på {other.namn}.")
+        other.take_damage(skada)
+
+    def special(self, other):
+        kostnad = 2
+        if self.stamina >= kostnad:
+            self.stamina -= kostnad
+            skada = self.attack_kraft + 8
+            print(f"{self.namn} använder specialattack {self.special_namn} ({kostnad} stamina) och gör {skada} skada.")
+            other.take_damage(skada)
+        else:
+            print(f"{self.namn} har inte tillräckligt med stamina för {self.special_namn}. Utför vanlig attack istället.")
+            self.attack(other)
+
+    def resurs_text(self):
+        return f"Stamina: {self.stamina}"
+
 class Arena:
-    def __init__(self, spelare1, spelare2):
-        self.spelare1 = spelare1
-        self.spelare2 = spelare2
+    def __init__(self, spelare, motståndare):
+        self.spelare = spelare
+        self.motståndare = motståndare
 
-    def fight(self):
-        attacker = self.spelare1
-        defender = self.spelare2
+    def start_fight(self):
+        tur_spelare = True
         runda = 1
-        while attacker.is_alive() and defender.is_alive():
-            print(f"\nRunda {runda}")
+        print(f"\nStriden börjar: {self.spelare.namn} vs {self.motståndare.namn}\n")
+        while self.spelare.is_alive() and self.motståndare.is_alive():
+            print(f"Runda: {runda}")
+            if tur_spelare:
+                print(f"Din tur: {self.spelare.namn}")
+                print(f"Din hälsa: {self.spelare.get_health()}  Motståndarens hälsa: {self.motståndare.get_health()}")
+                print("1) Använd vanlig attack")
 
-mage = Mage("Merlin", 20, 3, mana = 10)
-ranger = Ranger("Robin", 18, 4, energy = 8)
-warrior = Warrior("Thor", 22, 2, stamina = 12)
+                text = self.spelare.resurs_text()
+                if text:
+                   print(f"2) Använd specialattack  ({text})")
+                else:
+                  print("2) Använd specialattack (ingen extra resurs)")
+                val = input("Välj (1-2): ")
+                if val == "2":
+                    self.spelare.special(self.motståndare)
+                else:
+                    self.spelare.attack(self.motståndare)
+            else:
+                print(f"Motståndarens tur: {self.motståndare.namn}")
+                self.motståndare.special(self.spelare)
 
-mage.attack(ranger)
-ranger.attack(warrior)
-warrior.attack(mage)
-mage.attack(warrior)
-warrior.attack(ranger)
-ranger.attack(mage)
+            tur_spelare = not tur_spelare
+            runda += 1
+            print("")
+        if self.spelare.is_alive():
+            print(f"Slutresultat: {self.spelare.namn} vinner striden!")
+        else:
+            print(f"Slutresultat: {self.motståndare.namn} vinner striden!")
+
+
+def start_spel():
+    print("Välj din karaktär:")
+    print("1) Robin (Ranger)")
+    print("2) Merlin (Mage)")
+    print("3) Thor (Warrior)")
+    val = input("Ditt val (1-3): ")
+
+    if val == "1":
+        spelare = Ranger("Robin", 100, 4, energy=15)
+        motståndare = Warrior("Thor", 100, 2, stamina=20)
+    elif val == "2":
+        spelare = Mage("Merlin", 100, 3, mana=18)
+        motståndare = Ranger("Robin", 100, 4, energy=15)
+    else:
+        spelare = Warrior("Thor", 100, 2, stamina=20)
+        motståndare = Mage("Merlin", 100, 3, mana=18)
+
+    arena = Arena(spelare, motståndare)
+    arena.start_fight()
+
+
+if __name__ == "__main__":
+    start_spel()
+
+
+
